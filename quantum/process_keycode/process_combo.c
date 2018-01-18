@@ -50,7 +50,7 @@ static inline void send_combo(uint16_t action, bool pressed)
 #define NO_COMBO_KEYS_ARE_DOWN      (0 == combo->state)
 #define KEY_STATE_DOWN(key)         do{ combo->state |= (1<<key); } while(0)
 #define KEY_STATE_UP(key)           do{ combo->state &= ~(1<<key); } while(0)
-static bool process_single_combo(combo_t *combo, uint16_t keycode, keyrecord_t *record) 
+static bool process_single_combo(combo_t *combo, uint16_t keycode, keyrecord_t *record)
 {
     uint8_t count = 0;
     uint8_t index = -1;
@@ -99,10 +99,10 @@ static bool process_single_combo(combo_t *combo, uint16_t keycode, keyrecord_t *
             send_keyboard_report();
             unregister_code16(keycode);
 #endif
-            combo->timer = 0;            
+            combo->timer = 0;
         }
 
-        KEY_STATE_UP(index);        
+        KEY_STATE_UP(index);
     }
 
     if (NO_COMBO_KEYS_ARE_DOWN) {
@@ -117,9 +117,12 @@ bool process_combo(uint16_t keycode, keyrecord_t *record)
     bool is_combo_key = false;
 
     for (current_combo_index = 0; current_combo_index < COMBO_COUNT; ++current_combo_index) {
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Warray-bounds"
         combo_t *combo = &key_combos[current_combo_index];
+        #pragma GCC diagnostic pop
         is_combo_key |= process_single_combo(combo, keycode, record);
-    }    
+    }
 
     return !is_combo_key;
 }
@@ -133,17 +136,17 @@ void matrix_scan_combo(void)
         combo_t *combo = &key_combos[i];
         #pragma GCC diagnostic pop
         if (combo->timer &&
-            combo->timer != COMBO_TIMER_ELAPSED && 
+            combo->timer != COMBO_TIMER_ELAPSED &&
             timer_elapsed(combo->timer) > COMBO_TERM) {
-            
+
             /* This disables the combo, meaning key events for this
-             * combo will be handled by the next processors in the chain 
+             * combo will be handled by the next processors in the chain
              */
             combo->timer = COMBO_TIMER_ELAPSED;
 
 #ifdef COMBO_ALLOW_ACTION_KEYS
-            process_action(&combo->prev_record, 
-                store_or_get_action(combo->prev_record.event.pressed, 
+            process_action(&combo->prev_record,
+                store_or_get_action(combo->prev_record.event.pressed,
                                     combo->prev_record.event.key));
 #else
             unregister_code16(combo->prev_key);
