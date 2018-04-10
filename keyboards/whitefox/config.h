@@ -70,4 +70,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define NO_ACTION_MACRO
 //#define NO_ACTION_FUNCTION
 #define TAPPING_TERM 500
+#define IGNORE_MOD_TAB_INTERRUPT
 #endif
