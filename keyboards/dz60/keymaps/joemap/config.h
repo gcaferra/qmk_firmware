@@ -7,3 +7,6 @@
 #define GRAVE_ESC_GUI_OVERRIDE
 
 #endif
+
+#define PERMISSIVE_HOLD
+#define TAPPING_TERM 300
