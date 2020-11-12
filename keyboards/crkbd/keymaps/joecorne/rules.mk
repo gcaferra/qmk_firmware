@@ -1,7 +1,7 @@
 
 
 RGBLIGHT_ENABLE         = no
-RGB_MATRIX_ENABLE       = WS2812
+RGB_MATRIX_ENABLE       =  yes
 # OLED_DRIVER_ENABLE      = yes
 
 # Do not enable SLEEP_LED_ENABLE. it uses the same timer as BACKLIGHT_ENABLE
