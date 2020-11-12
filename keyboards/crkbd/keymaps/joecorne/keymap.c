@@ -45,7 +45,6 @@ enum custom_keycodes {
   RAISE,
   ADJUST,
   FUNK,
-  BACKLIT,
   RGBRST
 };
 
@@ -60,7 +59,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_GESC,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                        KC_LGUI,   LOWER,  KC_SPACE,     KC_ENT,   RAISE,MO(_FUNK)\
+                                        KC_LGUI,   LOWER,  KC_SPACE,     KC_ENT,   RAISE,    FUNK\
                                       //`--------------------------'  `--------------------------'
 
   ),
@@ -228,6 +227,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           layer_on(_ADJUST);
         } else {
           layer_off(_ADJUST);
+        }
+        return false;
+    case FUNK:
+        if (record->event.pressed) {
+          layer_on(_FUNK);
+        } else {
+          layer_off(_FUNK);
         }
         return false;
     case RGB_MOD:
