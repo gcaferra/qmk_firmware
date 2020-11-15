@@ -18,20 +18,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 
+extern keymap_config_t keymap_config;
 
 #ifdef RGBLIGHT_ENABLE
 //Following line allows macro to read current RGB settings
 extern rgblight_config_t rgblight_config;
 #endif
-#ifdef SSD1306OLED
-  #include "ssd1306.h"
-#endif
-
-extern uint8_t is_master;
 
 #ifdef OLED_DRIVER_ENABLE
 static uint32_t oled_timer = 0;
 #endif
+
+extern uint8_t is_master;
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
@@ -123,6 +121,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
 };
+
+
+void matrix_init_user(void) {
+    #ifdef RGBLIGHT_ENABLE
+      RGB_current_mode = rgblight_config.mode;
+    #endif
+}
 
 
 #ifdef OLED_DRIVER_ENABLE
@@ -274,30 +279,17 @@ void render_logo(void) {
 }
 
 void render_layer_state(void) {
-    static const char PROGMEM default_layer[] = {
-        0x20, 0x94, 0x95, 0x96, 0x20,
-        0x20, 0xb4, 0xb5, 0xb6, 0x20,
-        0x20, 0xd4, 0xd5, 0xd6, 0x20, 0};
-    static const char PROGMEM raise_layer[] = {
-        0x20, 0x97, 0x98, 0x99, 0x20,
-        0x20, 0xb7, 0xb8, 0xb9, 0x20,
-        0x20, 0xd7, 0xd8, 0xd9, 0x20, 0};
-    static const char PROGMEM lower_layer[] = {
-        0x20, 0x9a, 0x9b, 0x9c, 0x20,
-        0x20, 0xba, 0xbb, 0xbc, 0x20,
-        0x20, 0xda, 0xdb, 0xdc, 0x20, 0};
-    static const char PROGMEM adjust_layer[] = {
-        0x20, 0x9d, 0x9e, 0x9f, 0x20,
-        0x20, 0xbd, 0xbe, 0xbf, 0x20,
-        0x20, 0xdd, 0xde, 0xdf, 0x20, 0};
     if(layer_state_is(_ADJUST)) {
-        oled_write_P(adjust_layer, false);
+        oled_write_P(PSTR("adjus"), false);
     } else if(layer_state_is(_LOWER)) {
-        oled_write_P(lower_layer, false);
+        oled_write_P(PSTR("numer"), false);
     } else if(layer_state_is(_RAISE)) {
-        oled_write_P(raise_layer, false);
-    } else {
-        oled_write_P(default_layer, false);
+        oled_write_P(PSTR("punkt"), false);
+    } else if(layer_state_is(_FUNK)) {
+        oled_write_P(PSTR("funct"), false);
+    }
+     else {
+        oled_write_P(PSTR("deflt"), false);
     }
 }
 
@@ -305,6 +297,7 @@ void render_status_main(void) {
     render_logo();
     render_space();
     render_layer_state();
+    render_space();
     render_space();
     render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
     render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
@@ -314,6 +307,7 @@ void render_status_secondary(void) {
     render_logo();
     render_space();
     render_layer_state();
+    render_space();
     render_space();
     render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
     render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
@@ -337,6 +331,7 @@ void oled_task_user(void) {
 
 #endif
 
+
 int RGB_current_mode;
 
 void persistent_default_layer_set(uint16_t default_layer) {
@@ -354,14 +349,14 @@ void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
   }
 }
 
-void matrix_init_user(void) {
-    #ifdef RGBLIGHT_ENABLE
-      RGB_current_mode = rgblight_config.mode;
-    #endif
-}
-
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (record->event.pressed) {
+#ifdef OLED_DRIVER_ENABLE
+        oled_timer = timer_read32();
+#endif
+    // set_timelog();
+  }
   switch (keycode) {
     case QWERTY:
       if (record->event.pressed) {
