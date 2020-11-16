@@ -131,6 +131,49 @@ void matrix_init_user(void) {
 
 
 #ifdef OLED_DRIVER_ENABLE
+const char *get_wpm_string(void);
+
+#    define KEYLOG_LEN 5
+char     keylog_str[KEYLOG_LEN] = {};
+uint8_t  keylogs_str_idx        = 0;
+uint16_t log_timer              = 0;
+
+const char code_to_name[60] = {
+    ' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f',
+    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+    'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+    'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\',
+    '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
+
+void add_keylog(uint16_t keycode) {
+    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) || (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) {
+        keycode = keycode & 0xFF;
+    }
+
+    for (uint8_t i = KEYLOG_LEN - 1; i > 0; i--) {
+        keylog_str[i] = keylog_str[i - 1];
+    }
+    if (keycode < 60) {
+        keylog_str[0] = code_to_name[keycode];
+    }
+    keylog_str[KEYLOG_LEN - 1] = 0;
+
+    log_timer = timer_read();
+}
+
+void update_log(void) {
+    if (timer_elapsed(log_timer) > 750) {
+        add_keylog(0);
+    }
+}
+
+void render_keylogger_status(void) {
+    oled_write_P(PSTR("Keys "), false);
+    oled_write(keylog_str, false);
+}
+
+
 oled_rotation_t oled_init_user(oled_rotation_t rotation) { return OLED_ROTATION_270; }
 
 void render_space(void) {
@@ -280,11 +323,11 @@ void render_logo(void) {
 
 void render_layer_state(void) {
     if(layer_state_is(_ADJUST)) {
-        oled_write_P(PSTR("adjus"), false);
+        oled_write_P(PSTR("adjst"), false);
     } else if(layer_state_is(_LOWER)) {
-        oled_write_P(PSTR("numer"), false);
+        oled_write_P(PSTR("numbr"), false);
     } else if(layer_state_is(_RAISE)) {
-        oled_write_P(PSTR("punkt"), false);
+        oled_write_P(PSTR("punct"), false);
     } else if(layer_state_is(_FUNK)) {
         oled_write_P(PSTR("funct"), false);
     }
@@ -303,14 +346,25 @@ void render_status_main(void) {
     render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
 }
 
+
+const char *get_wpm_string(){
+    static char layer_state_str[24];
+  char word_per_minute[17];
+
+  snprintf(word_per_minute, sizeof(word_per_minute), "%d",   get_current_wpm());
+
+  strcpy(layer_state_str, "WPM: \n ");
+  strcat(layer_state_str, word_per_minute);
+  strcat(layer_state_str, "\n");
+  return layer_state_str;
+}
+
 void render_status_secondary(void) {
     render_logo();
     render_space();
-    render_layer_state();
+    oled_write_ln(get_wpm_string(), false);
     render_space();
-    render_space();
-    render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
-    render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
+    render_keylogger_status();
 }
 
 void oled_task_user(void) {
@@ -354,8 +408,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
 #ifdef OLED_DRIVER_ENABLE
         oled_timer = timer_read32();
+        add_keylog(keycode);
 #endif
-    // set_timelog();
   }
   switch (keycode) {
     case QWERTY:

@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define MASTER_RIGHT
 // #define EE_HANDS
 
+
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAPPING_TERM 150
 #define TAPPING_FORCE_HOLD
@@ -63,7 +64,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Disable the animations you don't want/need.  You will need to disable a good number of these    *
  * because they take up a lot of space.  Disable until you can successfully compile your firmware. */
-// #   define DISABLE_RGB_MATRIX_ALPHAS_MODS
+#   define DISABLE_RGB_MATRIX_ALPHAS_MODS
 #   define DISABLE_RGB_MATRIX_GRADIENT_UP_DOWN
 #   define DISABLE_RGB_MATRIX_BREATHING
 #   define DISABLE_RGB_MATRIX_BAND_SAT
@@ -77,7 +78,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #   define DISABLE_RGB_MATRIX_CYCLE_UP_DOWN
 #   define DISABLE_RGB_MATRIX_CYCLE_OUT_IN
 #   define DISABLE_RGB_MATRIX_CYCLE_OUT_IN_DUAL
-// #   define DISABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
+#   define DISABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
 #   define DISABLE_RGB_MATRIX_DUAL_BEACON
 #   define DISABLE_RGB_MATRIX_CYCLE_PINWHEEL
 #   define DISABLE_RGB_MATRIX_CYCLE_SPIRAL
@@ -86,7 +87,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #   define DISABLE_RGB_MATRIX_RAINDROPS
 #   define DISABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
 // #   define DISABLE_RGB_MATRIX_TYPING_HEATMAP
-// #   define DISABLE_RGB_MATRIX_DIGITAL_RAIN
+#   define DISABLE_RGB_MATRIX_DIGITAL_RAIN
 #   define DISABLE_RGB_MATRIX_SOLID_REACTIVE
 #   define DISABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #   define DISABLE_RGB_MATRIX_SOLID_REACTIVE_WIDE
