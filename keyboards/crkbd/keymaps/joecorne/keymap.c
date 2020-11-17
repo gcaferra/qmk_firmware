@@ -122,6 +122,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+#ifdef RGBLIGHT_ENABLE
+int RGB_current_mode;
+#endif
+
 
 void matrix_init_user(void) {
     #ifdef RGBLIGHT_ENABLE
@@ -385,8 +389,6 @@ void oled_task_user(void) {
 
 #endif
 
-
-int RGB_current_mode;
 
 void persistent_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);

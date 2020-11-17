@@ -46,7 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 // #define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
-#define OLED_FONT_H "keyboards/crkbd/keymaps/soundmonster/glcdfont.c"
+#define OLED_FONT_H "keyboards/crkbd/keymaps/joecorne/glcdfont.c"
 
 #ifdef RGB_MATRIX_ENABLE
 //#   define RGB_MATRIX_KEYPRESSES // reacts to keypresses
