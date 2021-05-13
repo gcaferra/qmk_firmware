@@ -35,6 +35,7 @@ enum custom_keycodes {
 #define CTL_F CTL_T(KC_F)
 #define SFT_D SFT_T(KC_D)
 #define ALT_S ALT_T(KC_S)
+#define _A LT(_MOVES, KC_A)
 
 #define CTL_J CTL_T(KC_J)
 #define SFT_K SFT_T(KC_K)
@@ -45,7 +46,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_ESC,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_TAB,    KC_A,   ALT_S,   SFT_D,   CTL_F,    KC_G,                         KC_H,   CTL_J,   SFT_K,   ALT_L, KC_SCLN, KC_QUOT,\
+       KC_TAB,    _A,   ALT_S,   SFT_D,   CTL_F,    KC_G,                         KC_H,   CTL_J,   SFT_K,   ALT_L, KC_SCLN, KC_QUOT,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LGUI,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_EQL,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -92,9 +93,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_PUNCT] = LAYOUT_split_3x6_3( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_PIPE, KC_EXLM,   KC_AT, KC_LPRN, KC_RPRN,  KC_DLR,                      _______, _______, _______, _______, _______,  KC_DEL,\
+      KC_PIPE, KC_EXLM,   KC_AT, KC_LCBR, KC_RCBR,  KC_DLR,                      KC_TILD, KC_COLN, _______, _______, _______,  KC_DEL,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_GRV, KC_CIRC, KC_MINS, KC_LCBR, KC_RCBR, KC_UNDS,                      _______, _______, _______, _______, _______, _______,\
+       KC_GRV, KC_CIRC, KC_MINS, KC_LPRN, KC_RPRN, KC_UNDS,                      _______, _______, _______, _______, _______, _______,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_HASH, KC_ASTR, KC_AMPR, KC_LBRC, KC_RBRC, KC_BSLS,                      _______, _______, _______, _______, _______, _______,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -327,11 +328,11 @@ void render_layer_state(void) {
     } else if(layer_state_is(_LOWER)) {
         oled_write_P(PSTR("numbr"), false);
     } else if(layer_state_is(_RAISE)) {
-        oled_write_P(PSTR("punc "), false);
+        oled_write_P(PSTR("raise"), false);
     } else if(layer_state_is(_PUNCT)) {
-        oled_write_P(PSTR("func "), false);
+        oled_write_P(PSTR("funct"), false);
     } else if(layer_state_is(_MOVES)) {
-        oled_write_P(PSTR("move "), false);
+        oled_write_P(PSTR("moves"), false);
     }
      else {
         oled_write_P(PSTR("deflt"), false);
@@ -349,6 +350,7 @@ void render_status_main(void) {
 }
 
 
+#ifdef WPM_ENABLE
 const char *get_wpm_string(){
     static char layer_state_str[24];
   char word_per_minute[17];
@@ -360,11 +362,12 @@ const char *get_wpm_string(){
   strcat(layer_state_str, "\n");
   return layer_state_str;
 }
+#endif
 
 void render_status_secondary(void) {
     render_logo();
     render_space();
-    oled_write_ln(get_wpm_string(), false);
+    //oled_write_ln(get_wpm_string(), false);
     render_space();
     render_keylogger_status();
 }

@@ -1,9 +1,9 @@
 MOUSEKEY_ENABLE = no
-RGBLIGHT_ENABLE    = no
+RGBLIGHT_ENABLE    = yes
 RGB_MATRIX_ENABLE  = WS2812
 OLED_DRIVER_ENABLE = yes
 NKRO_ENABLE        = yes
-WPM_ENABLE = yes
+WPM_ENABLE = no
 MIDI_ENABLE = no            # MIDI controls
 AUDIO_ENABLE = no           # Audio output on port C6
 UNICODE_ENABLE = no         # Unicode
