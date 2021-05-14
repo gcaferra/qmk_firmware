@@ -350,26 +350,14 @@ void render_status_main(void) {
 }
 
 
-#ifdef WPM_ENABLE
-const char *get_wpm_string(){
-    static char layer_state_str[24];
-  char word_per_minute[17];
-
-  snprintf(word_per_minute, sizeof(word_per_minute), "%d",   get_current_wpm());
-
-  strcpy(layer_state_str, "WPM: \n ");
-  strcat(layer_state_str, word_per_minute);
-  strcat(layer_state_str, "\n");
-  return layer_state_str;
-}
-#endif
-
 void render_status_secondary(void) {
     render_logo();
     render_space();
-    //oled_write_ln(get_wpm_string(), false);
+    render_layer_state();
     render_space();
-    render_keylogger_status();
+    render_space();
+    render_mod_status_gui_alt(get_mods()|get_oneshot_mods());
+    render_mod_status_ctrl_shift(get_mods()|get_oneshot_mods());
 }
 
 void oled_task_user(void) {
