@@ -50,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LGUI,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_MENU,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                        MOVES,   LOWER,  KC_SPACE,     KC_ENT,   RAISE,    PUNCT\
+                                        MOVES,   LOWER,  KC_SPACE,     KC_ENT,   PUNCT,    RAISE\
                                       //`--------------------------'  `--------------------------'
 
   ),
@@ -328,9 +328,9 @@ void render_layer_state(void) {
     } else if(layer_state_is(_LOWER)) {
         oled_write_P(PSTR("numbr"), false);
     } else if(layer_state_is(_RAISE)) {
-        oled_write_P(PSTR("raise"), false);
+        oled_write_P(PSTR(" F*  "), false);
     } else if(layer_state_is(_PUNCT)) {
-        oled_write_P(PSTR("funct"), false);
+        oled_write_P(PSTR("punct"), false);
     } else if(layer_state_is(_MOVES)) {
         oled_write_P(PSTR("moves"), false);
     }
